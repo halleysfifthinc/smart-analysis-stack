@@ -1,4 +1,4 @@
-% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
+%% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
 %  This program comes with ABSOLUTELY NO WARRANTY; for details, see 'LICENSE.txt'.
 %  This is free software, and you are welcome to redistribute it
 %  under certain conditions; for details, see 'LICENSE.txt'.
@@ -46,7 +46,7 @@ for T = 1:ITERS
     end
     PC = barepca(c_temp);
 
-    %% Compute residuals
+    % Compute residuals
     for n=1:length(binswPts)
         residuals(n) = norm(Fp(n,:) * PC(1,:)' - Fp(n,:));
     end

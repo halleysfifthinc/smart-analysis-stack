@@ -1,10 +1,10 @@
-% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
+%% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
 %  This program comes with ABSOLUTELY NO WARRANTY; for details, see 'LICENSE.txt'.
 %  This is free software, and you are welcome to redistribute it
 %  under certain conditions; for details, see 'LICENSE.txt'.
 
 function varargout = test_gui(varargin)
-% TEST_GUI MATLAB code for test_gui.fig
+%TEST_GUI MATLAB code for test_gui.fig
 %      TEST_GUI, by itself, creates a new TEST_GUI or raises the existing
 %      singleton*.
 %
@@ -48,7 +48,7 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-% --- Executes just before test_gui is made visible.
+%% --- Executes just before test_gui is made visible.
 function test_gui_OpeningFcn(hObject, ~, handles, varargin)
 % Choose default command line output for test_gui
 handles.output = hObject;
@@ -60,11 +60,11 @@ guidata(hObject, handles);
 % Setup default variables, etc.
 initialize_gui(hObject, handles, false);
 
-% --- Exececuted by the OpeningFcn or on reset
+%% --- Exececuted by the OpeningFcn or on reset
 function initialize_gui(fig_handle, handles, isreset)
-
 % Set default values and placeholders, set the values of the respective GUI
 % elements
+
 handles.binWidth = 4;
 set(handles.binwidthselector,'Value',3);
 handles.graphType = 1;
@@ -108,12 +108,12 @@ end
 guidata(handles.figure1, handles);
 
 
-% --- Outputs from this function are returned to the command line.
+%% --- Outputs from this function are returned to the command line.
 function varargout = test_gui_OutputFcn(hObject, ~, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-% --- Executes on button press in pickfile.
+%% --- Executes on button press in pickfile.
 function pickfile_Callback(hObject, ~, handles)
 % Get file name and path from user
 [motfilename,lastpath] = uigetfile({'*.mot','MOT motion files (*.mot)';...
@@ -239,7 +239,7 @@ end
 
 guidata(hObject,handles)
 
-% --- Executes on button press in picksecondfile.
+%% --- Executes on button press in picksecondfile.
 function picksecondfile_Callback(hObject, ~, handles)
 % Get file name and path from user
 [motfilename,lastpath] = uigetfile({'*.mot','MOT motion files (*.mot)';...
@@ -275,12 +275,12 @@ end
 
 guidata(hObject,handles)
 
-% --- Executes on button press in reset.
+%% --- Executes on button press in reset.
 function reset_Callback(hObject, ~, handles)
 % Run the initialize function and notify that it is a reset.
 initialize_gui(gcbf, handles, true);
 
-% --- Executes on button press in savebutton.
+%% --- Executes on button press in savebutton.
 function savebutton_Callback(hObject, ~, handles)
 
 n=true;
@@ -328,7 +328,7 @@ while n
 end
 
 
-% --- Executes on selection change in anglelist.
+%% --- Executes on selection change in anglelist.
 function anglelist_Callback(hObject, ~, handles)
 % Get the angle numbers and associated angle names from the callback
 contents = get(hObject,'Value');
@@ -344,14 +344,14 @@ handles.selectedAnglesStrings = strings;
 guidata(hObject,handles)
 
 
-% --- Executes during object creation, after setting all properties.
+%% --- Executes during object creation, after setting all properties.
 function anglelist_CreateFcn(hObject, ~, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-% --- Executes on selection change in graphpick.
+%% --- Executes on selection change in graphpick.
 function graphpick_Callback(hObject, ~, handles)
 % Get the graphType from the callback and update the handles structure
 graphType = get(hObject,'Value');
@@ -361,14 +361,14 @@ if handles.DEBUG
     disp(['graphType = ',num2str(handles.graphType)])
 end
 
-% --- Executes during object creation, after setting all properties.
+%% --- Executes during object creation, after setting all properties.
 function graphpick_CreateFcn(hObject, ~, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-% --- Executes on button press in gobutton.
+%% --- Executes on button press in gobutton.
 function gobutton_Callback(hObject, ~, handles)
 % Create text objects containing the human readable angle names
 prettyStrings = {   'Pelvis Tilt (deg)', ...
@@ -650,7 +650,7 @@ else
 end
 clear angles_raw data binAngleIndices angleStr
 
-% --- Executes on selection change in binwidthselector.
+%% --- Executes on selection change in binwidthselector.
 function binwidthselector_Callback(hObject, ~, handles)
 %Get the new binWidth, store it in handles, and update the angleIndices.
 binWidth = get(hObject,'Value');
@@ -674,6 +674,7 @@ if handles.DEBUG
 end
 guidata(hObject,handles)
 
+%% --- Called from binwidthselector
 function var = CalcAngleIndices(handles)
 % Clear the variables in case the new angleIndices are different (shorter)
 % lengths and some data from the old binWidth value would hold over and
@@ -694,14 +695,14 @@ end
 var = handles;
 
 
-% --- Executes during object creation, after setting all properties.
+%% --- Executes during object creation, after setting all properties.
 function binwidthselector_CreateFcn(hObject, ~, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-% --- Executes when user attempts to close figure1.
+%% --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, ~, handles)
 % Attempts to close all graphs that have been made during the course of the
 % GUI's lifetime

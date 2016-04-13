@@ -1,4 +1,4 @@
-% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
+%% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
 %  This program comes with ABSOLUTELY NO WARRANTY; for details, see 'LICENSE.txt'.
 %  This is free software, and you are welcome to redistribute it
 %  under certain conditions; for details, see 'LICENSE.txt'.
@@ -31,7 +31,7 @@ offset = atan2d(radius_inPC(2),-radius_inPC(1));
 circle = [data_radius*cos((0:.01:360)-offset)',data_radius*sin((0:.01:360)-offset)',zeros(length(0:.01:360),1)];
 ideal_path = (circle/PC');
 
-%% Right
+%%Right
 % Project data onto principal components
 projected_r_data = (PC * r_data')';
 
@@ -55,7 +55,7 @@ r_angles = r_angles+180;
 [indices,~] = find(r_angles>360);
 r_angles(indices) = r_angles(indices)-360;
 
-%% Left
+%%Left
 % Project data onto principal components
 projected_l_data = (PC * l_data')';
 

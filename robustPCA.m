@@ -1,4 +1,4 @@
-% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
+%% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
 %  This program comes with ABSOLUTELY NO WARRANTY; for details, see 'LICENSE.txt'.
 %  This is free software, and you are welcome to redistribute it
 %  under certain conditions; for details, see 'LICENSE.txt'.
@@ -17,7 +17,7 @@ function [ origin, PC, Q ] = robustPCA( pointSet )
 %       PC = [e1,e2,e3] = The first, second, and third principal axes
 %       Q = The set of points used in the PCA calculations
 
-%% Setup
+% Setup
 d = 5; % Octree depth
 OT = OcTree(pointSet,'binCapacity',inf,'maxDepth',d,'maxSize',0);
 k = 4; % Subset size
@@ -27,7 +27,8 @@ gamma = 1.25;
 MAX_ITERS = 100000;
 r_max = 0;
 
-%% Plot bins if desired
+% Plot bins if desired
+
 % figure
 % boxH = OT.plot;
 % cols = lines(OT.BinCount);
@@ -39,7 +40,6 @@ r_max = 0;
 % binHasPts = ismember(1:OT.BinCount, OT.PointBins);
 % set(boxH(~binHasPts),'Visible','off');
 % axis image, view(3)
-%%
 
 [Q, Qind, PC] = lms(pointSet, k, OT);
 

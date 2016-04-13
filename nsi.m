@@ -1,4 +1,4 @@
-% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
+%% SMART Analysis Stack  Copyright (C) 2015-2016  Allen Hill
 %  This program comes with ABSOLUTELY NO WARRANTY; for details, see 'LICENSE.txt'.
 %  This is free software, and you are welcome to redistribute it
 %  under certain conditions; for details, see 'LICENSE.txt'.
@@ -12,7 +12,7 @@ function [ nsiMean_final, nsiStd_final ] = nsi( angles_r, angles_l, handlebar_an
 %   Gouwanda et al. "Identifying Gait Asymmetry..."
 %   doi:10.1016/j.jbiomech.2010.12.013
 
-%% Find the points at which the handlebars finish a revolution
+%%Find the points at which the handlebars finish a revolution
 %Find any peaks within the handlebar angle data
 [pks,locs] = findpeaks(abs(diff(handlebar_angles)));
 % Only use the peaks that are above 300, which are likely to be complete
@@ -43,7 +43,7 @@ for n=1:revs
   tmp_r{n} = interp1(handlebar_angles(x{n}),tmp_angles_r,linspace(0,360,standard_length),'linear','extrap');
 end
 
-%% Perform NSI calculation for each revolution
+%%Perform NSI calculation for each revolution
 %Start after the first peak and end at the second to last peak. This
 %ensures that no partial revolutions due to the beginning/ending of the
 %data are included.
