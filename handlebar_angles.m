@@ -6,7 +6,7 @@
 %% Environment setup
 clc
 % clear all
-% close all
+close all
 
 % Load last processed file/path or initialize them
 try
@@ -14,12 +14,12 @@ try
 catch
     filename = '';
     lastpath = strcat('\\letnet.net\fs\academics\Projects\AcademicAffairs\SchoolofEngineering\Projects',...
-        '\BME-JR-Research\2015_16 SeniorDesign\BIOMECHANICS\DATA_MoCap\Pilot_Capture');
+        '\BME-JR-Research\2015_16 SeniorDesign\BIOMECHANICS\DATA_MoCap');
     DEBUG = true;
     DEBUG_RAW = false;
     DEBUG_NORMALIZED = false;
     DEBUG_ANGLES = false;
-    DEBUG_ALL = false;
+    DEBUG_ALL = true;
 end
 
 %% File select
@@ -54,9 +54,9 @@ Markers = Markers(3:length(Markers));
 % Assign indexes for data segmentation
 for n=1:length(Markers)
     switch Markers{n}
-      case 'Handlebars_L'
+      case {'Handlebars_L','Handlebar_L'}
         l_handlebars_ind=n*3;
-      case 'Handlebars_R'
+      case {'Handlebars_R','Handlebar_R'}
         r_handlebars_ind=n*3;
 %       case 'R_MetaC2'
 %         r_metac2_ind=n*3;
@@ -83,8 +83,8 @@ clear file_handle h3 NumMarkers S Markers file n
 
 %% Data segmentation
 % Meta markers
-r_handlebar = capture_data.data(:,l_handlebars_ind:l_handlebars_ind+2);
-l_handlebar = capture_data.data(:,r_handlebars_ind:r_handlebars_ind+2);
+l_handlebar = capture_data.data(:,l_handlebars_ind:l_handlebars_ind+2);
+r_handlebar = capture_data.data(:,r_handlebars_ind:r_handlebars_ind+2);
 r_handlebar_vmkr = mean(r_handlebar);
 l_handlebar_vmkr = mean(l_handlebar);
 
@@ -174,18 +174,20 @@ if (DEBUG && DEBUG_NORMALIZED) || DEBUG_ALL
     figure
 
 %     subplot(2,1,1)
-    hold on
-    plot3(r_handlebar(:,1),r_handlebar(:,2),r_handlebar(:,3),'.','Color','blue')
-    plot3(0,0,0,'o','Color','blue')
-    plot3(l_handlebar(:,1),l_handlebar(:,2),l_handlebar(:,3),'.','Color','red')
-    plot3(0,0,0,'o','Color','red')
-    line([0 handlebar_pc(1,1)/5],[0 handlebar_pc(1,2)/5],[0 handlebar_pc(1,3)/5],'Color','blue')
-    line([0 handlebar_pc(2,1)/5],[0 handlebar_pc(2,2)/5],[0 handlebar_pc(2,3)/5],'Color','red')
-    line([0 handlebar_pc(3,1)/5],[0 handlebar_pc(3,2)/5],[0 handlebar_pc(3,3)/5],'Color','green')
-    title('Normalized Right Meta Data')
-    axis vis3d
-    rotate3d on
-    hold off
+  hold on
+  plot3(r_handlebar(:,1),r_handlebar(:,2),r_handlebar(:,3),'.','Color','blue')
+  plot3(handlebar_o(1),handlebar_o(2),handlebar_o(3),'o','Color','blue')
+%   plot3(0,0,0,'o','Color','blue')
+  plot3(l_handlebar(:,1),l_handlebar(:,2),l_handlebar(:,3),'.','Color','red')
+  plot3(handlebar_o(1),handlebar_o(2),handlebar_o(3),'o','Color','red')
+%   plot3(0,0,0,'o','Color','red')
+  line([0 handlebar_pc(1,1)/5],[0 handlebar_pc(1,2)/5],[0 handlebar_pc(1,3)/5],'Color','blue')
+  line([0 handlebar_pc(2,1)/5],[0 handlebar_pc(2,2)/5],[0 handlebar_pc(2,3)/5],'Color','red')
+  line([0 handlebar_pc(3,1)/5],[0 handlebar_pc(3,2)/5],[0 handlebar_pc(3,3)/5],'Color','green')
+  title('Normalized Right Meta Data')
+  axis vis3d
+  rotate3d on
+  hold off
 
 %     subplot(2,1,2)
 %     hold on
@@ -220,12 +222,12 @@ if (DEBUG && DEBUG_ANGLES) || DEBUG_ALL
     figure
     hold on
     plot3(r_handlebar(:,1),r_handlebar(:,2),r_handlebar(:,3),'.','Color','blue')
-    plot3(0,0,0,'o','Color','red')
-    plot3(r_handlebar_ideal_path(:,1),r_handlebar_ideal_path(:,2),r_handlebar_ideal_path(:,3),'Color','red','LineWidth',2)
+    plot3(handlebar_o(1),handlebar_o(2),handlebar_o(3),'o','Color','red')
+    plot3(ideal_path(:,1),ideal_path(:,2),ideal_path(:,3),'Color','red','LineWidth',2)
     line([0 handlebar_pc(1,1)/5],[0 handlebar_pc(1,2)/5],[0 handlebar_pc(1,3)/5],'Color','blue')
     line([0 handlebar_pc(2,1)/5],[0 handlebar_pc(2,2)/5],[0 handlebar_pc(2,3)/5],'Color','red')
     line([0 handlebar_pc(3,1)/5],[0 handlebar_pc(3,2)/5],[0 handlebar_pc(3,3)/5],'Color','green')
-    line([0 r_handlebar_radius],[0 0],[0 0],'Color','cyan')
+    line([0 handlebar_radius],[0 0],[0 0],'Color','cyan')
     axis vis3d
     rotate3d on
     hold off
@@ -255,7 +257,7 @@ end
 
 %% Saving and Workspace cleanup
 
-if DEBUG
+if false
   [savefilename,savelastpath] = uiputfile({'*.xlsx','Excel files (*.xlsx)'},'Save file name',lastpath);
   file = strcat(savelastpath,savefilename);
 
