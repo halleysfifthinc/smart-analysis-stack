@@ -105,15 +105,15 @@ if (DEBUG && DEBUG_RAW) || DEBUG_ALL
     figure
 
 %     %subplot(2,1,1)
-%     hold on
-%     plot3(r_handlebar(:,1),r_handlebar(:,2),r_handlebar(:,3),'.','Color','blue')
-%     plot3(r_handlebar_vmkr(1),r_handlebar_vmkr(2),r_handlebar_vmkr(3),'o','Color','blue')
-%     plot3(l_handlebar(:,1),l_handlebar(:,2),l_handlebar(:,3),'.','Color','red')
-%     plot3(l_handlebar_vmkr(1),l_handlebar_vmkr(2),l_handlebar_vmkr(3),'o','Color','red')
-%     axis vis3d
-%     rotate3d on
-%     title('Raw Handlebar Data')
-%     hold off
+    hold on
+    plot3(l_handlebar(:,1),l_handlebar(:,2),l_handlebar(:,3),'.','Color','blue')
+    plot3(l_handlebar_vmkr(1),l_handlebar_vmkr(2),l_handlebar_vmkr(3),'o','Color','blue')
+    plot3(r_handlebar(:,1),r_handlebar(:,2),r_handlebar(:,3),'.','Color','red')
+    plot3(r_handlebar_vmkr(1),r_handlebar_vmkr(2),r_handlebar_vmkr(3),'o','Color','red')
+    axis vis3d
+    rotate3d on
+    title('Raw Handlebar Data')
+    hold off
 
 %     subplot(2,1,2)
 %     hold on
@@ -131,9 +131,12 @@ end
 clear -regexp vmkr
 
 %% Normalizing Data
+valid_r_handlebar = find(mean(r_handlebar,2)~=0);
+valid_l_handlebar = find(mean(l_handlebar,2)~=0);
+
 % Center all the data at 0,0,0
-r_handlebar = detrend(r_handlebar,'constant');
-l_handlebar = detrend(l_handlebar,'constant');
+r_handlebar(valid_r_handlebar,:) = detrend(r_handlebar(valid_r_handlebar,:),'constant');
+l_handlebar(valid_l_handlebar,:) = detrend(l_handlebar(valid_l_handlebar,:),'constant');
 
 % r_metac2 = detrend(r_metac2,'constant');
 % r_metac5 = detrend(r_metac5,'constant');
@@ -156,11 +159,11 @@ l_handlebar = detrend(l_handlebar,'constant');
 % Perform PCA
 if DEBUG
     tic
-    [ handlebar_o, handlebar_pc, handlebar_Q ] = robustPCA([r_handlebar; l_handlebar]);
+    [ handlebar_o, handlebar_pc, handlebar_Q ] = robustPCA([r_handlebar(valid_r_handlebar,:); l_handlebar(valid_l_handlebar,:)]);
     %[ handlebar_o, handlebar_pc, handlebar_Q ] = robustPCA(combined);
     toc
 else
-    [ handlebar_o, handlebar_pc, ~ ] = robustPCA([r_handlebar; l_handlebar]);
+    [ handlebar_o, handlebar_pc, ~ ] = robustPCA([r_handlebar(valid_r_handlebar,:); l_handlebar(valid_l_handlebar,:)]);
     %[ handlebar_o, handlebar_pc, handlebar_Q ] = robustPCA(combined);
 end
 
@@ -175,16 +178,13 @@ if (DEBUG && DEBUG_NORMALIZED) || DEBUG_ALL
 
 %     subplot(2,1,1)
   hold on
-  plot3(r_handlebar(:,1),r_handlebar(:,2),r_handlebar(:,3),'.','Color','blue')
-  plot3(handlebar_o(1),handlebar_o(2),handlebar_o(3),'o','Color','blue')
-%   plot3(0,0,0,'o','Color','blue')
-  plot3(l_handlebar(:,1),l_handlebar(:,2),l_handlebar(:,3),'.','Color','red')
+  plot3(r_handlebar(valid_r_handlebar,1),r_handlebar(valid_r_handlebar,2),r_handlebar(valid_r_handlebar,3),'.','Color','red')
   plot3(handlebar_o(1),handlebar_o(2),handlebar_o(3),'o','Color','red')
-%   plot3(0,0,0,'o','Color','red')
+  plot3(l_handlebar(valid_l_handlebar,1),l_handlebar(valid_l_handlebar,2),l_handlebar(valid_l_handlebar,3),'.','Color','blue')
   line([0 handlebar_pc(1,1)/5],[0 handlebar_pc(1,2)/5],[0 handlebar_pc(1,3)/5],'Color','blue')
   line([0 handlebar_pc(2,1)/5],[0 handlebar_pc(2,2)/5],[0 handlebar_pc(2,3)/5],'Color','red')
   line([0 handlebar_pc(3,1)/5],[0 handlebar_pc(3,2)/5],[0 handlebar_pc(3,3)/5],'Color','green')
-  title('Normalized Right Meta Data')
+  title('Normalized Handlebar Data')
   axis vis3d
   rotate3d on
   hold off
@@ -221,7 +221,7 @@ if (DEBUG && DEBUG_ANGLES) || DEBUG_ALL
 
     figure
     hold on
-    plot3(r_handlebar(:,1),r_handlebar(:,2),r_handlebar(:,3),'.','Color','blue')
+    plot3(handlebar_Q(:,1),handlebar_Q(:,2),handlebar_Q(:,3),'.','Color','blue')
     plot3(handlebar_o(1),handlebar_o(2),handlebar_o(3),'o','Color','red')
     plot3(ideal_path(:,1),ideal_path(:,2),ideal_path(:,3),'Color','red','LineWidth',2)
     line([0 handlebar_pc(1,1)/5],[0 handlebar_pc(1,2)/5],[0 handlebar_pc(1,3)/5],'Color','blue')
@@ -247,8 +247,7 @@ if (DEBUG && DEBUG_ANGLES) || DEBUG_ALL
 %     hold off
 
     figure
-    hold on
-    plot(angles(1000:2000),'blue')
+    plot(angles(1:1000),'blue')
     %plot(r_handlebar_new(1000:2000),'red')
     %fig2plotly();
 end
@@ -269,5 +268,5 @@ if false
       clear all
   end
 else
-  xlswrite(strcat(lastpath,filename,' handlebars.xlsx'),[[0.01:.01:length(angles)*.01]',angles])
+  xlswrite(strcat(lastpath,filename(1:length(filename)-4),' handlebars.xlsx'),[[0.01:.01:length(angles)*.01]',angles])
 end
