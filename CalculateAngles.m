@@ -11,14 +11,22 @@ function [ angles, ideal_path, data_radius ] = CalculateAngles( r_data, l_data, 
 %   tangent. The angles are then rotated to set vertical (GCS) as the
 %   'zero' angle.
 
+% Get indices of valid markers (ie are not perfectly at 0)
+valid_r_data = find(mean(r_data,2)~=0);
+valid_l_data = find(mean(l_data,2)~=0);
+
+% Get indices of invalid markers (ie perfectly 0)
+invalid_r_data = find(mean(r_data,2)==0);
+invalid_l_data = find(mean(l_data,2)==0);
+
 % Center data just in case
-r_data = detrend(r_data,'constant');
-l_data = detrend(l_data,'constant');
+r_data(valid_r_data,:) = detrend(r_data(valid_r_data,:),'constant');
+l_data(valid_l_data,:) = detrend(l_data(valid_l_data,:),'constant');
 
 % Calculate radius using the average of the total distance from the center
 % of rotation
-r_radius = mean(sqrt(sum(abs(r_data).^2,2)));
-l_radius = mean(sqrt(sum(abs(l_data).^2,2)));
+r_radius = mean(sqrt(sum(abs(r_data(valid_r_data,:)).^2,2)));
+l_radius = mean(sqrt(sum(abs(l_data(valid_l_data,:)).^2,2)));
 data_radius = mean([r_radius,l_radius]);
 
 
@@ -84,8 +92,19 @@ l_angles(indices) = l_angles(indices)-360;
 % makes approx. 180 inbetween ~0 and ~360. We default to the left angle
 % because we use TDC of left handle as the reference datum.
 tmp_angles = mean([r_angles,l_angles],2);
-indices = find(abs(tmp_angles-r_angles)>90);
+indices = find(abs(tmp_angles-r_angles)>160);
 tmp_angles(indices) = l_angles(indices);
+
+% Set any angles where there is no valid marker data to NaN
+[~,j] = intersect(invalid_l_data,invalid_r_data);
+tmp_angles(j) = NaN;
+
+%Otherwise, make sure the angle for times missing a marker is based on
+%the existing marker (and not an average between a valid angle and an angle
+%calculated from 0)
+tmp_angles(invalid_l_data) = r_angles(invalid_l_data);
+tmp_angles(invalid_r_data) = l_angles(invalid_r_data);
+
 angles = tmp_angles;
 
 end
