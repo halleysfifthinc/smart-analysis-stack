@@ -43,6 +43,8 @@ while n < (length(pks)-2)
       tmp_l{revs} = interp1(handlebar_angles(x{revs}),tmp_angles_l,linspace(0,360,standard_length),'linear','extrap');
       tmp_r{revs} = interp1(handlebar_angles(x{revs}),tmp_angles_r,linspace(0,360,standard_length),'linear','extrap');
   end
+%   figure
+%   plot((locs(n)+1):locs(n+1),handlebar_angles((locs(n)+1):locs(n+1)))
   n = n+1;
 end
 
