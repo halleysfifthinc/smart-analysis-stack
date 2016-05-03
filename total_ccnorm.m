@@ -156,4 +156,4 @@ symmetricStrings = { 'Hip Flexion'; ...
                      'Wrist Dev' };
 
 xlswrite(strcat(lastpath,motfilename(1:length(motfilename)-4),' ccnorm.xlsx'),symmetricStrings,'A1:A14');
-xlswrite(strcat(lastpath,motfilename(1:length(motfilename)-4),' ccnorm.xlsx'),ccnorm','B1:B14');
+xlswrite(strcat(lastpath,motfilename(1:length(motfilename)-4),' ccnorm.xlsx'),ccnorm,'B1:B14');
