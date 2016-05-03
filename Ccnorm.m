@@ -30,6 +30,6 @@ acr = xcorr(angles_r);
 acl = xcorr(angles_l);
 
 % Calculate the Ccnorm of the two angles.
-ccnorm = max(cc)/sqrt(acr(angleLength)*acl(angleLength));
+ccnorm = max(abs(cc))/sqrt(acr(angleLength)*acl(angleLength));
 
 end
